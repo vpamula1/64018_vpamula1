@@ -1,0 +1,244 @@
+---
+title: "QMM_Assignment4"
+author: "Vivek Pamulaparthi"
+date: "2023-11-26"
+output: html_document
+---
+***
+
+***SUMMARY:***
+
+*1. P in terms of x1, x2, and x3 is P = 20x1 +15x2 + 25x3. *
+
+*2. The objective function which I got is maximization: Max Z = 20x1 + 15x2 + 25x3 − 6y1(+)-6y1(-)-0y2(+)-3y2(-) *
+
+*3. The goal was to maintain a steady employment level of no more than fifty hundred workers. But in this case, the business employed 25 hundred more people than the designated cap (y1p), which could result in penalties. *
+
+*4. The company's target profit is represented by the objective function value, which is now set at 225 million dollars. *
+
+*5. Loaded the objective function and constraints in Goal.lp file.*
+
+
+***
+
+***
+
+***Problem Statement:***
+
+The Research and Development Division of the Emax Corporation has developed three new products. A decision now needs to be made on which mix of these products should be produced.Management wants primary consideration given to three factors: total profit, stability in the workforce, and achieving an increase in the company’s earnings next year from the $60 million achieved this year. In particular, using the units
+given in the following table, they want to Maximize 
+
+Z = P - 5C - 2D, where 
+
+P = total (discounted) profit over the life of the new products,
+
+C = change (in either direction) in the current level of employment,
+
+D = decrease (if any) in next year’s earnings from the current year’s level.
+
+The amount of any increase in earnings does not enter into Z, because management is concerned primarily with just achieving some increase to keep
+the stockholders happy. (It has mixed feelings about a large increase that then would be difficult to surpass in subsequent years.)
+
+***
+
+```{r}
+library(kableExtra)
+```
+
+```{r}
+goal_prog36= data.frame(Factor=c("Total profit","Employement level","Earning next year"),
+"1"=c(20,6,8),
+"2"=c(15,4,7),
+"3"=c(25,5,5),
+Goal=c("Maximize","= 50",">=75"),
+Units=c('Millions of dollars','Hundreds of employees','Millions of dollars')
+)
+```
+
+```{r}
+goal_prog36 %>%
+kable(align = "c") %>%
+kable_classic() %>%
+add_header_above(header = c(" "=1,"Product"=3," "=2)) %>%
+add_header_above(header = c(" "=1,"Unit contribution"=3," "=2)) %>%
+column_spec(1,border_right = TRUE) %>%
+column_spec(4,border_right = TRUE) %>%
+column_spec(5,border_right = TRUE)
+```
+
+***
+
+## Question 1:
+
+***Define y1+ and y1-, respectively, as the amount over (if any) and the amount under (if any) the employment level goal. Define y2+ and y2- in the same way for the goal regarding earnings next year. Define x1, x2, and x3 as the production rates of Products 1, 2, and 3, respectively. With these definitions, use the goal programming technique to express y1+, y1- , y2+ and y2- algebraically in terms of x1, x2, and x3. Also, express P in terms of x1, x2, and x3.***
+
+
+The rates of production for the first, second, and third goods are denoted as 𝑥1, 𝑥2, and 𝑥3, respectively. The constraints can be formulated in relation to these products as follows:
+
+
+Let us consider
+y1 - Employment Level minus the target.
+
+y2 - Next Year Earnings minus the Target.
+
+y1+ - Penalty for employment level goal exceeding 50.
+
+y1- - Penalty for employment level goal decreasing below 50.
+
+y2+ - Exceed the next year earnings.
+
+y2- - Penalty for not reaching the next year earnings.
+
+
+
+Employment Level:
+$$ 6x1 + 4x2 + 5x3 = 50 $$
+
+Earning next year :
+$$ 8x1 + 7x2 + 5x3 ≥ 75 $$
+
+These two constraints can be expressed in a normalized form as follows:
+
+$$ y1 = 6x1 + 4x2 + 5x3 − 50 $$
+
+$$ y2 = 8x1 + 7x2 + 5x3 − 75 $$
+
+Where, actual profit = 6x1 + 4x2 + 5x3 and minimum profit requirement = 50 .𝑦1 has the flexibility to take on positive, negative, or zero values contingent upon the predominance of either the positive or negative component. Analogously, comparable explanations are applicable to the remaining two constraints.
+
+
+Let’s define:
+$$ yi= yi(+)-yi(-) $$
+
+
+$$ y1= y1(+)-y1(-) $$
+$$ y2= y2(+)-y2(-) $$
+
+A positive deviation suggests an excess or surplus in employment:
+$$ 1+ y1(+) $$ 
+
+It implies a performance that falls below or deviates negatively from the employment expectations:
+$$ y1(-) $$
+
+It suggests an exceeding of profit targets or a positive departure from the expected profit level:
+$$ y2(+) $$
+
+It points to a shortfall in earnings or a negative deviation from the anticipated level:
+$$ y2(-) $$
+
+These constraints can be expressed as follows:
+
+$$ y1(+)-y1(-)=  6x1 + 4x2 + 5x3 − 50 $$
+
+$$ y2(+)-y1(-)= 8x1 + 7x2 + 5x3 − 75 $$ 
+
+Basic mathematical calculations result in:
+
+$$ 6x1 + 4x2 + 5x3- (y1(+)-y1(-)) = 50 $$
+
+$$ 8x1 + 7x2 + 5x3- (y2(+)-y2(-)) = 75 $$
+
+
+Total Profits:
+As asked the value of P to be expressed
+
+Max P = 20x1 +15x2 + 25x3.
+
+Where, xj >=0, where j=1,2,3. 
+
+       yi + >=0, where i= 1,2.
+
+       yi - >=0, where i= 1,2.
+
+
+
+***
+
+***
+
+## Question 2:
+
+***Express management’s objective function in terms of x1, x2, x3, y1+, y1- , y2+ and y2-.***
+
+The maximization given is :
+
+$$ Maximize Z = P - 6C - 3D $$
+
+where
+Total Profits, P=
+$$ 20x1 + 15x2 + 25x3 $$
+
+C [change (in either direction) in the current level of employment] = 
+$$ y1 $$
+
+D [decrease (if any) in next year’s earnings from the current year’s level] =
+$$ y2 $$
+
+The objective function is:
+$$ Max Z = 20x1 + 15x2 + 25x3 − 6y1(+)-6y1(-)-0y2(+)-3y2(-) $$
+
+Subject to the constraints:
+
+$$ 6x1 + 4x2 + 5x3- (y1(+)-y1(-)) = 50 $$
+
+$$ 8x1 + 7x2 + 5x3- (y2(+)-y2(-)) = 75 $$ 
+
+Decision variables non-negativity condition:
+$$ x1 ≥ 0, x2 ≥ 0, x3 ≥ 0 $$
+
+$$ y1(+) ≥ 0, y1(-) ≥ 0, y2(+) ≥ 0,y2(-) ≥ 0 $$
+
+
+***
+
+***
+
+## Question 3:
+
+***Formulate and solve the linear programming model. What are your findings?***
+
+```{r}
+library(lpSolveAPI)
+Goal<- read.lp("Goal.lp")
+Goal
+
+```
+
+```{r}
+solve(Goal)
+```
+```{r}
+get.objective(Goal)
+
+```
+```{r}
+get.variables(Goal)
+
+```
+
+```{r}
+get.constraints(Goal)
+```
+
+
+# Findings that I found out:
+
+The following lists the solutions to the goal programming challenge.
+
+By employing the objective function and complying with the given limitations, the linear programming issue was successfully resolved. For the LP problem, the optimal goal value attained is 225. At the ideal solution, the following values are assumed for the choice variables:
+
+x1 = 0
+x2 = 0
+x3 = 15
+y1+ = 25
+y1− = 0
+y2+ = 0
+y2− = 0
+
+1. It was imperative to use combination units X1, X2, and X3 in order to maximize the value for the goal function. The ultimate solution, denoted by "0" for Product 1, Product 2, and Product 3 in terms of X1 and X2 and X3, represents the impossibility of producing 20 units of Product 1 and 15 units of Product 2. The change in X3 suggests that in order to optimize earnings, the corporation can only produce 15 units of Product 3, the only product in the portfolio.
+
+2. The goal was to maintain a steady employment level of no more than fifty hundred workers. But in this case, the business employed 25 hundred more people than the designated cap (y1p), which could result in penalties.
+
+3. The purpose of adding y2p and y2m was to adjust for any variations in the profits for the following year above the current level, which is represented as "0" in this case. This "0" figure denotes a stable earnings projection, meaning that there is no anticipated rise or fall in earnings from the current year to the next.
+
+
+***
